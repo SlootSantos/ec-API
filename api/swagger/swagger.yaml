@@ -1,0 +1,114 @@
+swagger: '2.0'
+info:
+  version: 0.0.1
+  title: Hello World App
+host: 'localhost:10010'
+basePath: /
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /:
+    x-swagger-router-controller: moltin_requests
+    get:
+      description: Returns initial content to caller
+      operationId: getHome
+      parameters:
+        - $ref: '#/parameters/StoreIdParam'
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/StandardResponse'
+        default:
+          description: Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /products:
+    x-swagger-router-controller: moltin_requests
+    get:
+      description: Returns Products to caller
+      operationId: getProducts
+      parameters:
+        - $ref: '#/parameters/StoreIdParam'
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/StandardResponse'
+        default:
+          description: Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /cart:
+    x-swagger-router-controller: moltin_requests
+    get:
+      description: Returns Cart Items to caller
+      operationId: getCart
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/StandardResponse'
+        default:
+          description: Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  '/cart/{productId}':
+    x-swagger-router-controller: moltin_requests
+    get:
+      description: Returns Products to caller
+      operationId: putToCart
+      parameters:
+        - $ref: '#/parameters/StoreIdParam'
+        - name: productId
+          in: path
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/StandardResponse'
+        default:
+          description: Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /cart/checkout:
+    x-swagger-router-controller: moltin_requests
+    get:
+      description: Creates an Order
+      operationId: checkout
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/StandardResponse'
+        default:
+          description: Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /swagger:
+    x-swagger-pipe: swagger_raw
+definitions:
+  StandardResponse:
+    type: object
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+parameters:
+  StoreIdParam:
+    name: store-id
+    in: header
+    description: StoreId that contains store + cart id
+    required: true
+    type: string
